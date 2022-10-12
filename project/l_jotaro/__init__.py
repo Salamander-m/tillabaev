@@ -1,0 +1,1 @@
+__all__ = ['trygonometria1','trans_16']
