@@ -6,11 +6,15 @@ from project.l_jotaro.trans_16 import from_hex
 from project.l_jotaro.trygonometria1 import *
 from arifmetika_main import * # адаптированный из второго модуля (только арифметика), подходящая для главной программы
 from commands import user_commands
-from commands import user_help
-from style import color
+from commands import user_help 
+from style import color # импортирует класс color, атрибуты которого являются строками ANSI последовательности
+
+
 # Объявления предущей переменной как "пустой", по которой сравнивается были ли предыдущие действия за сессию программы
 previous_answer = None
-eps = 6
+eps = 6 # точность до шести знаков
+
+
 # функции проверки строки, на всё ли элементы в ней цифры
 def isnum(s): # конструкция try-except
     try: # пытается привести s к float
@@ -77,21 +81,22 @@ def perevod_user_output(func):
     else:
         print(color.BLUE + 'Результат = ',result,'. Результат обнулен \(￣▽￣)/' + color.END,sep='') # вывод результата
     previous_answer = None
+  
     
 def main():
     print(color.YELLOW  + 'Добро пожаловать в приложение калькулятора! \nЧтобы посмотреть какие операции можно провести воспользуйтесь коммандой /help!\nУдачи!' + color.END)
     while True: # пока не написана команда /end
         user_com = str(input(color.DARKCYAN + 'Введите комманду: ' + color.END)) # вводится команда
         if user_commands(user_com):
-            if user_com == '/help':
-                user_help()
-            if user_com == '/end':
+            if user_com == '/help': # при вводе '/help' - использует функцию из commands.py user_help()
+                user_help() # проходит по dict l_commands и возвращает ключ и всё его значения 
+            if user_com == '/end': # при вводе '/end' - завершает while True
                 break;
-            if user_com == '/reset':
-                global previous_answer
+            if user_com == '/reset': # при вводе '/reset' делает previous_answer "пустым"
+                global previous_answer # обращается к глобальной переменной previous_answer
                 previous_answer = None
                 print('Успешно сброшено!')
-            if user_com in ['/summa','/chast','/vich','/umn']: 
+            if user_com in ['/summa','/chast','/vich','/umn']: # при вводе команды из списка
                 if previous_answer == None: # если результат был не получен ранее
                     numbers = arifmetika_user_input() # переменная принимает значения из функции user_input() - tuple
                     user_output(globals()[user_com[1:]](numbers[0],numbers[1])) # обращается к функции global() - которая является словарем переменных 
@@ -100,14 +105,14 @@ def main():
                 else: # если результат был получен ранее
                     numbers = user_input_with_pre()
                     user_output(globals()[user_com[1:]](numbers[0],numbers[1])) # такая же история как и выше
-            if user_com in ['/stepen','/koren','/fact'] or user_com in ['/mactg','/matg','/macos','/masin','/mctg','/mtg','/mcos','/msin']:
+            if user_com in ['/stepen','/koren','/fact'] or user_com in ['/mactg','/matg','/macos','/masin','/mctg','/mtg','/mcos','/msin']: # при вводе команды из списка
                 if previous_answer == None: # если результат был не получен ранее
                     numbers = one_user_input() # переменная принимает значения из функции user_input() - tuple
                     user_output(globals()[user_com[1:]](numbers)) 
                 else: # если результат был получен ранее
                     numbers = previous_answer
                     user_output(globals()[user_com[1:]](numbers)) # такая же история как и выше
-            if user_com in ['/from_oct','/from_bin','/from_dec']:
+            if user_com in ['/from_oct','/from_bin','/from_dec']: # при вводе команды из списка
                 if previous_answer == None: # если результат был не получен ранее
                     numbers = perevod_user_input() # переменная принимает значения из функции user_input() - tuple
                     perevod_user_output(globals()[user_com[1:]](numbers)) 
@@ -116,5 +121,6 @@ def main():
                     perevod_user_output(globals()[user_com[1:]](numbers)) # такая же история как и выше
         else:
             print(color.BOLD + color.RED + 'Вы ввели неправильную комманду! Воспользуйтесь /help!' + color.END)
+
 
 main()
