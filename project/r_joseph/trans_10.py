@@ -25,12 +25,12 @@ def from_dec(n):
         return "ERROR_401"
     
 def to2(n):     # decimal to binary
-    if n < 0:
-        sign= '-'
-    else:
-        sign = ''
-    n = abs(n)
     if str(n).isdigit() and isint(n):     # input validation
+        if n < 0:
+            sign= '-'
+        else:
+            sign = ''
+        n = abs(n)
         return(sign + "{0:b}".format(n))
     else:
         return "ERROR_401"
