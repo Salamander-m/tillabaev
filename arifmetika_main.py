@@ -8,24 +8,24 @@ def isnum(s):
 # блок арифметики
 def summa(a,b):
     if isnum(a) and isnum(b): # если переменная - число
-        return arifmetika.summa(float(a),float(b)) # преобразовывает их во float и высчитывает значение функции
+        return (arifmetika.summa(float(a),float(b))) # преобразовывает их во float и высчитывает значение функции
     else:
         return arifmetika.summa(a,b) # если не число - возвращает ошибку, которая указана в функции
 
 def chast(a,b):
     if isnum(a) and isnum(b): # если переменная - число
-        return arifmetika.chast(float(a),float(b)) # преобразовывает их во float и высчитывает значение функции
+        return (arifmetika.chast(float(a),float(b))) # преобразовывает их во float и высчитывает значение функции
     else:
         return arifmetika.chast(a,b) # если не число - возвращает ошибку, которая указана в функции
 
 def umn(a,b):
     if isnum(a) and isnum(b): # если переменная - число
-        return arifmetika.umn(float(a),float(b)) # преобразовывает их во float и высчитывает значение функции
+        return (arifmetika.umn(float(a),float(b))) # преобразовывает их во float и высчитывает значение функции
     else:
         return arifmetika.umn(a,b) # если не число - возвращает ошибку, которая указана в функции
 
 def vich(a,b):
     if isnum(a) and isnum(b): # если переменная - число
-        return arifmetika.vich(float(a),float(b)) # преобразовывает их во float и высчитывает значение функции
+        return (arifmetika.vich(float(a),float(b))) # преобразовывает их во float и высчитывает значение функции
     else:
         return arifmetika.vich(a,b) # если не число - возвращает ошибку, которая указана в функции

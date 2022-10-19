@@ -5,7 +5,7 @@ from project.r_joseph.trans_10 import from_dec
 from project.l_jotaro.trans_16 import from_hex
 from project.l_jotaro.trygonometria1 import *
 from arifmetika_main import * # адаптированный из второго модуля (только арифметика), подходящая для главной программы
-from commands import commands, commands_item, user_commands
+from commands import user_commands
 from commands import user_help 
 from os import system 
 import sys
@@ -43,9 +43,9 @@ def arifmetika_user_input(): # функция для ввода переменн
             num_first = (input('Введите первое значение: ')) # вводится первое число str
             break;
         except KeyboardInterrupt:
-            print('ERROR502:input ^C') # введенный символ ^C
+            print('ERROR502') # введенный символ ^C
         except EOFError:
-            print('ERROR503:input ^Z') # введенный символ ^Z
+            print('ERROR503') # введенный символ ^Z
     if num_first == 'pi':
         num_first = PI
     elif num_first == 'e':
@@ -60,9 +60,9 @@ def arifmetika_user_input(): # функция для ввода переменн
             num_second = (input('Введите второе значение: ')) # вводится второе число str
             break;
         except KeyboardInterrupt:
-            print('ERROR502:input ^C') # введенный символ ^C
+            print('ERROR502') # введенный символ ^C
         except EOFError:
-            print('ERROR503:input ^Z') # введенный символ ^Z
+            print('ERROR503') # введенный символ ^Z
     if num_second == 'pi':
         num_second = PI
     elif num_second == 'e':
@@ -98,9 +98,9 @@ def user_input_with_pre(): # функция, которая вызывается
             num_second = (input('Введите второе значение: ')) # ввод второго числа
             break;
         except KeyboardInterrupt:
-            print('ERROR502:input ^C') # введенный символ ^C
+            print('ERROR502') # введенный символ ^C
         except EOFError:
-            print('ERROR503:input ^Z') # введенный символ ^Z
+            print('ERROR503') # введенный символ ^Z
     if num_second == 'pi':
         num_second = PI
     elif num_second == 'e':
@@ -113,7 +113,7 @@ def user_input_with_pre(): # функция, которая вызывается
             return previous_answer,float(num_second) # возвращает предущий ответ и второе float(число) 
     elif type(num_second) == str:
         previous_answer = None
-        return 'ERROR501: Введено не число' # ошибка - которая говорит о том, что введено не число
+        return 'ERROR501' # ошибка - которая говорит о том, что введено не число
 
 
 def one_user_input():
@@ -122,9 +122,9 @@ def one_user_input():
             num_first = (input('Введите значение: ')) # вводится первое число str
             break;
         except KeyboardInterrupt:
-            print('ERROR502:input ^C') # введенный символ ^C
+            print('ERROR502') # введенный символ ^C
         except EOFError:
-            print('ERROR503:input ^Z') # введенный символ ^Z
+            print('ERROR503') # введенный символ ^Z
     if num_first == 'pi':
         num_first = PI
         return num_first
@@ -140,7 +140,7 @@ def one_user_input():
     else:
         global previous_answer
         previous_answer = None
-        return 'ERROR501: Введено не число' # ошибка - которая говорит о том, что введено не число   
+        return 'ERROR501' # ошибка - которая говорит о том, что введено не число   
 
 
 def perevod_user_input():
@@ -149,9 +149,9 @@ def perevod_user_input():
             num_first = (input('Введите число (кромен pi и e): ')) # вводится первое число str
             break;
         except KeyboardInterrupt:
-            print('ERROR502:input ^C') # введенный символ ^C
+            print('ERROR502') # введенный символ ^C
         except EOFError:
-            print('ERROR503:input ^Z') # введенный символ ^Z
+            print('ERROR503') # введенный символ ^Z
     if isnum(num_first):
         if len(num_first) < 9:
             return str(int(float(num_first))) # отрабсывание дробной части и перевод в строку
@@ -187,67 +187,47 @@ def main():
                 user_com = (input('Введите комманду: ' )) # вводится команда
                 break;
             except KeyboardInterrupt:
-                print('ERROR502:input ^C') # введенный символ ^C
+                print('ERROR502') # введенный символ ^C
             except EOFError:
-                print('ERROR503:input ^Z') # введенный символ ^Z
-        if len(user_com.split()) > 1 and '/help' in user_com:
-            sp = user_com.split()
-            if sp[1] in commands():
-                if sp[1] == 'Разделы':
-                    print(20*'-',*commands_item(sp[1]),sep='\n',end='\n'+20*'-'+'\n')
-                    while True:
-                        try:
-                            user_com = (input('Выберете раздел (1-4): ' )) # вводится команда
-                            break;
-                        except KeyboardInterrupt:
-                            print('ERROR502:input ^C') # введенный символ ^C
-                        except EOFError:
-                            print('ERROR503:input ^Z') # введенный символ ^Z
-                    for i in commands_item(sp[1]):
-                        if user_com in i:
-                            print(*commands_item(i[2:]))
-                else:
-                    print(*commands_item(sp[1]))
-           
+                print('ERROR503') # ^Z
+        if user_commands(user_com):
+            if user_com == '/help': # при вводе '/help' - использует функцию из commands.py user_help()
+                user_help() # проходит по dict l_commands и возвращает ключ и всё его значения 
+            if user_com == '/end': # при вводе '/end' - завершает while True
+                system('cls') # после этого очищает терминал
+                break;
+            if user_com == '/restart':
+                system('cls & python start.py') # после этого очищает терминал и запускает файл заново
+                sys.exit() # выключает текущую сессию
+            if user_com == '/reset': # при вводе '/reset' делает previous_answer "пустым"
+                global previous_answer # обращается к глобальной переменной previous_answer
+                previous_answer = None
+                print('Успешно сброшено!')
+            if user_com in ['/summa','/chast','/vich','/umn']: # при вводе команды из списка
+                if previous_answer == None: # если результат был не получен ранее
+                    numbers = arifmetika_user_input() # переменная принимает значения из функции user_input() - tuple
+                    user_output(globals()[user_com[1:]](numbers[0],numbers[1])) # обращается к функции global() - которая является словарем переменных 
+                    # достает из словаря user_com[1:] и передает значения из tuple - по итогу получается так, 
+                    # что строка введнная в переменную user_com - становится функцией 
+                else: # если результат был получен ранее
+                    numbers = user_input_with_pre()
+                    user_output(globals()[user_com[1:]](numbers[0],numbers[1])) # такая же история как и выше
+            if user_com in ['/stepen','/koren','/fact'] or user_com in ['/mactg','/matg','/macos','/masin','/mctg','/mtg','/mcos','/msin']: # при вводе команды из списка
+                if previous_answer == None: # если результат был не получен ранее
+                    numbers = one_user_input() # переменная принимает значения из функции user_input() - tuple
+                    user_output(globals()[user_com[1:]](numbers)) 
+                else: # если результат был получен ранее
+                    numbers = previous_answer
+                    user_output(globals()[user_com[1:]](numbers)) # такая же история как и выше
+            if user_com in ['/from_oct','/from_bin','/from_dec']: # при вводе команды из списка
+                if previous_answer == None: # если результат был не получен ранее
+                    numbers = perevod_user_input() # переменная принимает значения из функции user_input() - tuple
+                    perevod_user_output(globals()[user_com[1:]](numbers)) 
+                else: # если результат был получен ранее
+                    numbers = str(int(previous_answer)) # уберает дробную часть и переводит в строку
+                    perevod_user_output(globals()[user_com[1:]](numbers)) # такая же история как и выше
         else:
-            if user_commands(user_com):
-                if user_com == '/help': # при вводе '/help' - использует функцию из commands.py user_help()
-                    user_help() # проходит по dict l_commands и возвращает ключ и всё его значения 
-                if user_com == '/end': # при вводе '/end' - завершает while True
-                    system('cls') # после этого очищает терминал
-                    break;
-                if user_com == '/restart':
-                    system('cls & python start.py') # после этого очищает терминал и запускает файл заново
-                    sys.exit() # выключает текущую сессию
-                if user_com == '/reset': # при вводе '/reset' делает previous_answer "пустым"
-                    global previous_answer # обращается к глобальной переменной previous_answer
-                    previous_answer = None
-                    print('Успешно сброшено!')
-                if user_com in ['/summa','/chast','/vich','/umn']: # при вводе команды из списка
-                    if previous_answer == None: # если результат был не получен ранее
-                        numbers = arifmetika_user_input() # переменная принимает значения из функции user_input() - tuple
-                        user_output(globals()[user_com[1:]](numbers[0],numbers[1])) # обращается к функции global() - которая является словарем переменных 
-                        # достает из словаря user_com[1:] и передает значения из tuple - по итогу получается так, 
-                        # что строка введнная в переменную user_com - становится функцией 
-                    else: # если результат был получен ранее
-                        numbers = user_input_with_pre()
-                        user_output(globals()[user_com[1:]](numbers[0],numbers[1])) # такая же история как и выше
-                if user_com in ['/stepen','/koren','/fact'] or user_com in ['/mactg','/matg','/macos','/masin','/mctg','/mtg','/mcos','/msin']: # при вводе команды из списка
-                    if previous_answer == None: # если результат был не получен ранее
-                        numbers = one_user_input() # переменная принимает значения из функции user_input() - tuple
-                        user_output(globals()[user_com[1:]](numbers)) 
-                    else: # если результат был получен ранее
-                        numbers = previous_answer
-                        user_output(globals()[user_com[1:]](numbers)) # такая же история как и выше
-                if user_com in ['/from_oct','/from_bin','/from_dec']: # при вводе команды из списка
-                    if previous_answer == None: # если результат был не получен ранее
-                        numbers = perevod_user_input() # переменная принимает значения из функции user_input() - tuple
-                        perevod_user_output(globals()[user_com[1:]](numbers)) 
-                    else: # если результат был получен ранее
-                        numbers = str(int(previous_answer)) # уберает дробную часть и переводит в строку
-                        perevod_user_output(globals()[user_com[1:]](numbers)) # такая же история как и выше
-            else:
-                print('Вы ввели неправильную комманду! Воспользуйтесь /help!' )
+            print('Вы ввели неправильную комманду! Воспользуйтесь /help!' )
 
 
 main()
