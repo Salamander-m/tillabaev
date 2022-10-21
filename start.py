@@ -111,7 +111,7 @@ def user_input_with_pre(): # функция, которая вызывается
             return previous_answer,num_second # возвращает предущий ответ и второе - ошибку
         else:
             return previous_answer,float(num_second) # возвращает предущий ответ и второе float(число) 
-    elif type(num_second) == str:
+    else:
         previous_answer = None
         return 'ERROR501: Введено не число' # ошибка - которая говорит о том, что введено не число
 
