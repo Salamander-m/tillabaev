@@ -13,6 +13,24 @@ import sys
 previous_answer = None
 e = 9 # разрядность до 9 знаков
 
+# проверка на ^C и ^Z
+def ch(st):
+    while True:
+        try:
+            s = (input(f'{st}' )) # вводится команда
+            return s
+        except KeyboardInterrupt:
+            print('ERROR502:input ^C') # введенный символ ^C
+        except EOFError:
+            print('ERROR503:input ^Z') # введенный символ ^Z
+
+def wpie(n):
+    if n == 'pi':
+        return PI
+    elif n == 'e':
+        return EPS
+    else:
+        return n
 
 # функции проверки строки, на всё ли элементы в ней цифры
 def isnum(s): # конструкция try-except
@@ -36,38 +54,17 @@ def check_input(n): # убреает необходимые знаки, чтоб
     else:
         return(float(n))
 
-
 def arifmetika_user_input(): # функция для ввода переменных
-    while True:
-        try:
-            num_first = (input('Введите первое значение: ')) # вводится первое число str
-            break;
-        except KeyboardInterrupt:
-            print('ERROR502:input ^C') # введенный символ ^C
-        except EOFError:
-            print('ERROR503:input ^Z') # введенный символ ^Z
-    if num_first == 'pi':
-        num_first = PI
-    elif num_first == 'e':
-        num_first = EPS
-    elif isnum(num_first):
+    num_first = ch('Введите первое число: ')
+    num_first = wpie(num_first)
+    if isnum(num_first):
         if check_input(num_first) != float(num_first):
             num_first = ('ERROR504: Число больше 9-ти разрядов')
     elif type(check_input(num_first)) == str:
         num_first = check_input(num_first)
-    while True:
-        try:
-            num_second = (input('Введите второе значение: ')) # вводится второе число str
-            break;
-        except KeyboardInterrupt:
-            print('ERROR502:input ^C') # введенный символ ^C
-        except EOFError:
-            print('ERROR503:input ^Z') # введенный символ ^Z
-    if num_second == 'pi':
-        num_second = PI
-    elif num_second == 'e':
-        num_second = EPS
-    elif isnum(num_second):
+    num_second = ch('Введите второе число: ')
+    num_second = wpie(num_second)
+    if isnum(num_second):
         if check_input(num_second) != float(num_second):
             num_second = ('ERROR504: Число больше 9-ти разрядов')
     elif type(check_input(num_first)) == str:
@@ -93,19 +90,9 @@ def user_output(func): # функция для вывода результата
 def user_input_with_pre(): # функция, которая вызывается если переменная предыдущего ответа не пуста
     global previous_answer
     print('Предыдущее значение =',check_input(previous_answer))
-    while True:
-        try:
-            num_second = (input('Введите второе значение: ')) # ввод второго числа
-            break;
-        except KeyboardInterrupt:
-            print('ERROR502:input ^C') # введенный символ ^C
-        except EOFError:
-            print('ERROR503:input ^Z') # введенный символ ^Z
-    if num_second == 'pi':
-        num_second = PI
-    elif num_second == 'e':
-        num_second = EPS
-    elif isnum(num_second): # проверка, является ли введенная переменная числом
+    num_second = ch('Введите второе число: ')
+    num_second = wpie(num_second)
+    if isnum(num_second): # проверка, является ли введенная переменная числом
         if check_input(num_second) != float(num_second):
             num_second = ('ERROR504: Число больше 9-ти разрядов')
             return previous_answer,num_second # возвращает предущий ответ и второе - ошибку
@@ -117,21 +104,9 @@ def user_input_with_pre(): # функция, которая вызывается
 
 
 def one_user_input():
-    while True:
-        try:
-            num_first = (input('Введите значение: ')) # вводится первое число str
-            break;
-        except KeyboardInterrupt:
-            print('ERROR502:input ^C') # введенный символ ^C
-        except EOFError:
-            print('ERROR503:input ^Z') # введенный символ ^Z
-    if num_first == 'pi':
-        num_first = PI
-        return num_first
-    elif num_first == 'e':
-        num_first = EPS
-        return num_first
-    elif isnum(num_first):
+    num_first = ch('Введите первое число: ')
+    num_first = wpie(num_first)
+    if isnum(num_first):
         if check_input(num_first) != float(num_first):
             num_first = ('ERROR504: Число больше 9-ти разрядов')
             return num_first
@@ -144,14 +119,7 @@ def one_user_input():
 
 
 def perevod_user_input():
-    while True:
-        try:
-            num_first = (input('Введите число (кромен pi и e): ')) # вводится первое число str
-            break;
-        except KeyboardInterrupt:
-            print('ERROR502:input ^C') # введенный символ ^C
-        except EOFError:
-            print('ERROR503:input ^Z') # введенный символ ^Z
+    num_first = ch('Введите первое число: ')
     if isnum(num_first):
         if len(num_first) < 9:
             return str(int(float(num_first))) # отрабсывание дробной части и перевод в строку
@@ -171,10 +139,10 @@ def perevod_user_output(func):
     if 'ERROR' in str(result):
         print('Ошибка: ',result,'. Результат обнулен!' ,sep='') # вывод ошибки
     else:
-        if check_input(result) != result:
-            print('Результат = ',check_input(result),'. Ответ был обрезан до 9-ти разрядов. Результат обнулен!',sep='')
+        if int(check_input(result)) != int(result):
+            print('Результат = ',int(check_input(result)),'\nОтвет был обрезан до 9-ти разрядов. Результат обнулен!',sep='')
         else:
-            print('Результат = ',check_input(result),'Результат обнулен!',sep='')
+            print('Результат = ',int(check_input(result)),'\nРезультат обнулен!',sep='')
     previous_answer = None
   
     
@@ -182,27 +150,13 @@ def main():
     system('cls')
     print('Добро пожаловать в приложение калькулятора! \nЧтобы посмотреть какие операции можно провести воспользуйтесь коммандой /help!\nУдачи!' )
     while True: # пока не написана команда /end
-        while True:
-            try:
-                user_com = (input('Введите комманду: ' )) # вводится команда
-                break;
-            except KeyboardInterrupt:
-                print('ERROR502:input ^C') # введенный символ ^C
-            except EOFError:
-                print('ERROR503:input ^Z') # введенный символ ^Z
+        user_com = ch('Введите комманду: ' )
         if len(user_com.split()) > 1 and '/help' in user_com:
             sp = user_com.split()
             if sp[1] in commands():
                 if sp[1] == 'Разделы':
                     print(20*'-',*commands_item(sp[1]),sep='\n',end='\n'+20*'-'+'\n')
-                    while True:
-                        try:
-                            user_com = (input('Выберете раздел (1-4): ' )) # вводится команда
-                            break;
-                        except KeyboardInterrupt:
-                            print('ERROR502:input ^C') # введенный символ ^C
-                        except EOFError:
-                            print('ERROR503:input ^Z') # введенный символ ^Z
+                    user_com = ch('Введите комманду: ' )
                     for i in commands_item(sp[1]):
                         if user_com in i:
                             print(*commands_item(i[2:]))
